@@ -12,8 +12,10 @@
 </material-drawer>
 
 <main class="material-content">
-    <dl-form *ngIf="ready" [workingDocumentId]="workingDocumentId"></dl-form>
-    <div *ngIf="!ready" class="loadingContainer">
-        <material-spinner></material-spinner>
+    <div class="content-container">
+        <dl-form *ngIf="ready" [workingDocumentId]="workingDocumentId"></dl-form>
+        <div *ngIf="!ready" class="loadingContainer">
+            <material-spinner></material-spinner>
+        </div>
     </div>
 </main>

@@ -1,3 +1,20 @@
 <div [style.opacity]="((readyFuture | async) ?? false) ? '100%' : '50%'">
-    <material-input type="text" label="Document name" floatingLabel [ngFormControl]="nameControl"></material-input>
+    <div class="name-container">
+        <material-input type="text" label="Document name" floatingLabel [ngFormControl]="nameControl"
+            (change)="updateName()"></material-input>
+    </div>
+    <div class="buttons-container">
+        <input #fileInput type="file" accept="image/*" capture="environment"
+            (input)="addImage(fileInput.files.first)" />
+        <material-button raised class="indigo" (trigger)="getImage()">
+            <material-icon icon="camera_alt"></material-icon> Add photo
+        </material-button>
+        <material-button raised>
+            <material-icon icon="picture_as_pdf"></material-icon> Render PDF
+        </material-button>
+    </div>
+    <div class="images-container">
+        <dl-image-display *ngFor="let url of imageUrls; let i=index" [src]="url" (delete)="removeImage(i)">
+        </dl-image-display>
+    </div>
 </div>

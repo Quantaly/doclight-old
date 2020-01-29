@@ -6,12 +6,17 @@ import 'package:angular_forms/angular_forms.dart';
 
 import '../../models/document.dart';
 import '../../services/storage_service.dart';
+import '../image_display/image_display_component.dart';
 
 @Component(selector: 'dl-form', templateUrl: 'form_component.html', styleUrls: [
   'form_component.css'
 ], directives: [
+  NgFor,
   materialInputDirectives,
   formDirectives,
+  MaterialButtonComponent,
+  MaterialIconComponent,
+  ImageDisplayComponent,
 ], pipes: [
   AsyncPipe,
 ])
@@ -23,7 +28,10 @@ class FormComponent implements AfterChanges {
   @Input()
   int workingDocumentId;
 
-  Future<bool> readyFuture = Future.value(true);
+  @ViewChild('fileInput')
+  html.FileUploadInputElement fileInput;
+
+  Future<bool> readyFuture = Future.value(false);
   Document workingDocument = Document.empty();
 
   Control<String> nameControl = Control('');
@@ -31,7 +39,6 @@ class FormComponent implements AfterChanges {
 
   @override
   void ngAfterChanges() {
-    print('ngAfterChanges ran');
     readyFuture = () async {
       workingDocument = await _storage.retrieveDocument(workingDocumentId);
       nameControl.updateValue(workingDocument.name);
@@ -45,9 +52,13 @@ class FormComponent implements AfterChanges {
     await _storage.updateDocument(workingDocumentId, workingDocument);
   }
 
-  Future<void> setName(String name) async {
-    workingDocument.name = name;
+  Future<void> updateName() async {
+    workingDocument.name = nameControl.value;
     await saveDocument();
+  }
+
+  void getImage() {
+    fileInput.click();
   }
 
   Future<void> addImage(html.Blob image) async {

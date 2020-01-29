@@ -106,7 +106,7 @@ class StorageService {
     var documentStore = txn.objectStore('documents');
     var imageStore = txn.objectStore('images');
     await Future.wait([
-      documentStore.put(document, documentId),
+      documentStore.put(document.toJson(), documentId),
       imageStore.delete(imageId),
       txn.completed,
     ]);

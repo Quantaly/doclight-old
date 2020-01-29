@@ -1,0 +1,21 @@
+@import 'package:angular_components/material_button/mixins';
+
+.container {
+    display: inline-block;
+    position: relative;
+    margin: 0.25em;
+}
+
+img {
+    max-width: 50vw;
+    max-height: 20em;
+}
+
+material-fab[mini][icon] {
+    position: absolute;
+    bottom: 0.5em;
+    right: 0.25em;
+    z-index: 200;
+}
+
+@include button-background-color("material-fab[mini][icon]", rgba(255, 255, 255, 0.5))
