@@ -17,12 +17,7 @@ class StorageService {
   Future<int> createDocument() async {
     var txn = await getTransaction('documents', 'readwrite');
     var documentStore = txn.objectStore('documents');
-    var now = DateTime.now();
-    var ret = await documentStore.add((Document()
-          ..name = 'Scan from ${now.month}-${now.day}-${now.year}'
-          ..lastModified = now
-          ..imageIds = [])
-        .toJson());
+    var ret = await documentStore.add(Document.empty().toJson());
     await txn.completed;
     return ret;
   }
@@ -96,13 +91,25 @@ class StorageService {
   }
 
   Future<List<String>> loadImageUrls(List<int> ids) async =>
-      (await loadImages(ids)).map(html.Url.createObjectUrlFromBlob);
+      (await loadImages(ids)).map(html.Url.createObjectUrlFromBlob).toList();
 
   Future<void> deleteImage(int id) async {
     var txn = await getTransaction('images', 'readwrite');
     var imageStore = txn.objectStore('images');
     await imageStore.delete(id);
     await txn.completed;
+  }
+
+  Future<void> deleteImageAndUpdateDocument(
+      int imageId, int documentId, Document document) async {
+    var txn = await getTransaction(['documents', 'images'], 'readwrite');
+    var documentStore = txn.objectStore('documents');
+    var imageStore = txn.objectStore('images');
+    await Future.wait([
+      documentStore.put(document, documentId),
+      imageStore.delete(imageId),
+      txn.completed,
+    ]);
   }
 
   Future<void> deleteImages(List<int> ids) async {

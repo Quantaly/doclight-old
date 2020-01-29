@@ -11,11 +11,28 @@ import 'src/services/storage_service.dart';
   'app_component.css',
   'package:angular_components/app_layout/layout.scss.css',
 ], directives: [
+  NgIf,
   MaterialButtonComponent,
   MaterialTemporaryDrawerComponent,
   MaterialIconComponent,
+  MaterialSpinnerComponent,
   FormComponent,
 ], providers: [
   ClassProvider(StorageService),
 ])
-class AppComponent {}
+class AppComponent implements OnInit {
+  final StorageService _storage;
+
+  AppComponent(this._storage);
+
+  bool ready = false;
+  int workingDocumentId;
+
+  @override
+  void ngOnInit() {
+    () async {
+      workingDocumentId = await _storage.createDocument();
+      ready = true;
+    }();
+  }
+}
