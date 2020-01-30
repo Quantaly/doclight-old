@@ -8,7 +8,9 @@
 </header>
 
 <material-drawer temporary #drawer overlay>
-    <div>yeet</div>
+    <div class="drawer-container" *deferredContent>
+        <dl-document-list (open)="workingDocumentId = $event; drawer.toggle()"></dl-document-list>
+    </div>
 </material-drawer>
 
 <main class="material-content">

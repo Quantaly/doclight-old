@@ -12,7 +12,7 @@ class Document {
   factory Document.empty() {
     var now = DateTime.now();
     return Document()
-      ..name = 'Scan from ${now.month}-${now.day}-${now.year} '
+      ..name = '${now.month}-${now.day}-${now.year} '
           '${now.hour}:${now.minute.toString().padLeft(2, '0')}'
       ..lastModified = now
       ..imageIds = [];

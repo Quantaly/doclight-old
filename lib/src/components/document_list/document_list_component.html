@@ -1,0 +1,13 @@
+<material-list *ngIf="(docListFuture | async) != null">
+    <material-list-item *ngFor="let doc of (docListFuture | async)" (trigger)="openDocument(doc.id)">
+        <div class="list-item-container">
+            <span class="document-name" [innerText]="doc.document.name"></span>
+            <material-button class="delete-button" icon (trigger)="$event.stopPropagation(); deleteDocument(doc.id)">
+                <material-icon icon="delete"></material-icon>
+            </material-button>
+            <material-button class="render-button" icon (trigger)="$event.stopPropagation(); renderDocument(doc.id)">
+                <material-icon icon="picture_as_pdf"></material-icon>
+            </material-button>
+        </div>
+    </material-list-item>
+</material-list>
