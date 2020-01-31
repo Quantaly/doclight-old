@@ -29,8 +29,7 @@ class ImageDisplayComponent {
     return ImageDisplayComponent._(controller.stream, controller, sanitizer);
   }
 
-  SafeUrl get safeSrc =>
-      _sanitizer.bypassSecurityTrustUrl(src);
+  SafeUrl get safeSrc => _sanitizer.bypassSecurityTrustUrl(src);
 
   void triggerDelete() => _deleteController.add(null);
 }

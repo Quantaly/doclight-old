@@ -3,6 +3,7 @@ import 'package:angular_components/angular_components.dart';
 
 import 'src/components/document_list/document_list_component.dart';
 import 'src/components/form/form_component.dart';
+import 'src/services/rendering_service.dart';
 import 'src/services/storage_service.dart';
 
 // AngularDart info: https://angulardart.dev
@@ -25,9 +26,7 @@ import 'src/services/storage_service.dart';
     DeferredContentDirective,
     DocumentListComponent,
   ],
-  providers: [
-    ClassProvider(StorageService),
-  ],
+  providers: [ClassProvider(StorageService), ClassProvider(RenderingService)],
   exports: [print],
 )
 class AppComponent implements OnInit {

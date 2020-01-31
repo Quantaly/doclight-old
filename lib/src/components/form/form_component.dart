@@ -5,6 +5,7 @@ import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
 
 import '../../models/document.dart';
+import '../../services/rendering_service.dart';
 import '../../services/storage_service.dart';
 import '../image_display/image_display_component.dart';
 
@@ -22,8 +23,9 @@ import '../image_display/image_display_component.dart';
 ])
 class FormComponent implements AfterChanges {
   final StorageService _storage;
+  final RenderingService _rendering;
 
-  FormComponent(this._storage);
+  FormComponent(this._storage, this._rendering);
 
   @Input()
   int workingDocumentId;
@@ -74,5 +76,10 @@ class FormComponent implements AfterChanges {
     workingDocument.lastModified = DateTime.now();
     await _storage.deleteImageAndUpdateDocument(
         imageId, workingDocumentId, workingDocument);
+  }
+
+  Future<void> render() async {
+    await _rendering.renderAndDownload(
+        workingDocumentId, '${workingDocument.name}.pdf');
   }
 }
