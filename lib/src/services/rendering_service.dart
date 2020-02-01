@@ -12,9 +12,12 @@ class RenderingService {
 
   Future<String> renderDocument(int id) async {
     var request = RenderRequest()..id = id;
+    var responseF = _client.sendRequest('render', request.toJson());
+    html.window.alert('Rendering has started. It may take a while, '
+        'but please leave this tab open. '
+        'The PDF will be automatically saved as soon as it is ready.');
     var response = RenderResponse.fromJson(
-        (await _client.sendRequest('render', request.toJson()) as Map)
-            .cast<String, dynamic>());
+        (await responseF as Map).cast<String, dynamic>());
     return response.url;
   }
 

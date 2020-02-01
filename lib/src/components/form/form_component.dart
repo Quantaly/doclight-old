@@ -9,18 +9,22 @@ import '../../services/rendering_service.dart';
 import '../../services/storage_service.dart';
 import '../image_display/image_display_component.dart';
 
-@Component(selector: 'dl-form', templateUrl: 'form_component.html', styleUrls: [
-  'form_component.css'
-], directives: [
-  NgFor,
-  materialInputDirectives,
-  formDirectives,
-  MaterialButtonComponent,
-  MaterialIconComponent,
-  ImageDisplayComponent,
-], pipes: [
-  AsyncPipe,
-])
+@Component(
+  selector: 'dl-form',
+  templateUrl: 'form_component.html',
+  styleUrls: ['form_component.css'],
+  directives: [
+    NgFor,
+    materialInputDirectives,
+    formDirectives,
+    MaterialButtonComponent,
+    MaterialIconComponent,
+    ImageDisplayComponent,
+  ],
+  pipes: [
+    AsyncPipe,
+  ],
+)
 class FormComponent implements AfterChanges {
   final StorageService _storage;
   final RenderingService _rendering;
