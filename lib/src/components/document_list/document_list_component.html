@@ -5,7 +5,7 @@
             <material-button class="delete-button" icon (trigger)="$event.stopPropagation(); deleteDocument(doc.id)">
                 <material-icon icon="delete"></material-icon>
             </material-button>
-            <material-button class="render-button" icon
+            <material-button class="render-button" icon [disabled]="doc.document.imageIds.isEmpty"
                 (trigger)="$event.stopPropagation(); renderDocument(doc.id, doc.document.name)">
                 <material-icon icon="picture_as_pdf"></material-icon>
             </material-button>
