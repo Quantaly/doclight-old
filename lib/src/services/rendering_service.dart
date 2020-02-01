@@ -11,7 +11,6 @@ class RenderingService {
   final html.AnchorElement _downloadAnchor = _createDownloadAnchor();
 
   Future<String> renderDocument(int id) async {
-    print('renderDocument() called');
     var request = RenderRequest()..id = id;
     var response = RenderResponse.fromJson(
         (await _client.sendRequest('render', request.toJson()) as Map)
@@ -20,26 +19,23 @@ class RenderingService {
   }
 
   void download(String url, String name) {
-    print('download() called');
     _downloadAnchor
-      ..href = name
-      ..download = url
+      ..href = url
+      ..download = name
       ..click();
   }
 
   Future<void> renderAndDownload(int id, String name) async {
     download(await renderDocument(id), name);
-    print('done');
   }
 
   static Client _openClient() {
     var worker = html.Worker('worker.dart.js');
 
-    var outputSink = StreamController<Map<String, dynamic>>();
+    var outputSink = StreamController<String>();
     outputSink.stream.listen((data) => worker.postMessage(data));
-    var client = Client.withoutJson(InjectedChannel(
-      html.window.onMessage.map((msg) {
-        print('received message: $msg');
+    var client = Client(InjectedChannel(
+      worker.onMessage.map((msg) {
         return msg.data;
       }),
       outputSink,

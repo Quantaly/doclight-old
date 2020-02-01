@@ -26,8 +26,10 @@ import 'src/services/storage_service.dart';
     DeferredContentDirective,
     DocumentListComponent,
   ],
-  providers: [ClassProvider(StorageService), ClassProvider(RenderingService)],
-  exports: [print],
+  providers: [
+    ClassProvider(StorageService),
+    ClassProvider(RenderingService),
+  ],
 )
 class AppComponent implements OnInit {
   final StorageService _storage;

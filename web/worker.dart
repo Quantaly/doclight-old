@@ -8,13 +8,12 @@ import 'package:doclight/worker.dart';
 void main() {
   var self = html.DedicatedWorkerGlobalScope.instance;
 
-  var outputSink = StreamController<Map<String, dynamic>>();
+  var outputSink = StreamController<String>();
   outputSink.stream.listen((data) {
-    print('posting message: $data');
     self.postMessage(data);
   });
-  var server = Server.withoutJson(InjectedChannel<Map<String, dynamic>>(
-    self.onMessage.map((msg) => (msg.data as Map).cast<String, dynamic>()),
+  var server = Server(InjectedChannel(
+    self.onMessage.map((msg) => msg.data),
     outputSink,
   ));
 
@@ -22,15 +21,10 @@ void main() {
 
   // ignore: avoid_types_on_closure_parameters
   server.registerMethod('render', (Parameters params) async {
-    print('1');
     var request = RenderRequest.fromJson(params.asMap.cast<String, dynamic>());
-    print('2');
     var document = await storage.retrieveDocument(request.id);
-    print('3');
     var images = await storage.loadImages(document.imageIds);
-    print('4');
     var pdf = await renderPdfFromImages(images);
-    print('5');
     return (RenderResponse()..url = html.Url.createObjectUrlFromBlob(pdf))
         .toJson();
   });

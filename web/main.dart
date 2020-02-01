@@ -10,7 +10,6 @@ import 'main.template.dart' as self;
 final InjectorFactory injector = self.injector$Injector;
 
 void main() {
-  window.onMessage.listen((msg) => print('received message: $msg'));
   runApp(ng.AppComponentNgFactory, createInjector: injector);
 }
 

@@ -26,7 +26,7 @@ Future<html.Blob> renderPdfFromImages(List<html.Blob> images) async {
     ));
   }
 
-  return html.Blob([pdf.save()], 'application/pdf');
+  return html.Blob([Uint8List.fromList(pdf.save())], 'application/pdf');
 }
 
 Future<Uint8List> readBlob(html.Blob blob) {
