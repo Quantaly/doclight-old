@@ -48,9 +48,13 @@ class FormComponent implements AfterChanges {
     readyFuture = () async {
       workingDocument = await _storage.retrieveDocument(workingDocumentId);
       nameControl.updateValue(workingDocument.name);
-      imageUrls = await _storage.loadImageUrls(workingDocument.imageIds);
-    }()
-        .then((_) => true);
+      await reloadImages();
+      return true;
+    }();
+  }
+
+  Future<void> reloadImages() async {
+    imageUrls = await _storage.loadImageUrls(workingDocument.imageIds);
   }
 
   Future<void> saveDocument() async {
@@ -74,7 +78,17 @@ class FormComponent implements AfterChanges {
     await saveDocument();
   }
 
+  Future<void> rotateImage(int index) async {
+    readyFuture = () async {
+      await _rendering.rotateImageClockwise(index);
+      await reloadImages();
+      return true;
+    }();
+    await readyFuture;
+  }
+
   Future<void> removeImage(int index) async {
+    await readyFuture;
     imageUrls.removeAt(index);
     var imageId = workingDocument.imageIds.removeAt(index);
     workingDocument.lastModified = DateTime.now();

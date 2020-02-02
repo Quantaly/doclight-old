@@ -82,6 +82,14 @@ class StorageService {
     return ret;
   }
 
+  Future<html.Blob> loadImage(int id) async {
+    var txn = await _getTransaction('images', 'readonly');
+    var imageStore = txn.objectStore('images');
+    var ret = await imageStore.getObject(id);
+    print(ret);
+    return ret;
+  }
+
   Future<List<html.Blob>> loadImages(List<int> ids) async {
     var txn = await _getTransaction('images', 'readonly');
     var imageStore = txn.objectStore('images');
@@ -93,6 +101,13 @@ class StorageService {
 
   Future<List<String>> loadImageUrls(List<int> ids) async =>
       (await loadImages(ids)).map(html.Url.createObjectUrlFromBlob).toList();
+
+  Future<void> updateImage(int id, html.Blob image) async {
+    var txn = await _getTransaction('images', 'readwrite');
+    var imageStore = txn.objectStore('images');
+    await imageStore.put(image, id);
+    await txn.completed;
+  }
 
   Future<void> deleteImage(int id) async {
     var txn = await _getTransaction('images', 'readwrite');

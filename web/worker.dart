@@ -29,5 +29,17 @@ void main() {
         .toJson();
   });
 
+  // ignore: avoid_types_on_closure_parameters
+  server.registerMethod('rotateImageClockwise', (Parameters params) async {
+    print('1');
+    var id = RotateRequest.fromJson(params.asMap.cast<String, dynamic>()).id;
+    print('2');
+    var image = await storage.loadImage(id);
+    print('3');
+    await storage.updateImage(id, await rotateImageClockwise(image));
+    print('4');
+    return RotateResponse().toJson();
+  });
+
   server.listen();
 }

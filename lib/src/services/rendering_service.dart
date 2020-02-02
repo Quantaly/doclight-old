@@ -32,6 +32,11 @@ class RenderingService {
     download(await renderDocument(id), name);
   }
 
+  Future<void> rotateImageClockwise(int id) async {
+    await _client.sendRequest(
+        'rotateImageClockwise', (RotateRequest()..id = id).toJson());
+  }
+
   static Client _openClient() {
     var worker = html.Worker('worker.dart.js');
 

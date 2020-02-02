@@ -29,6 +29,17 @@ Future<html.Blob> renderPdfFromImages(List<html.Blob> images) async {
   return html.Blob([Uint8List.fromList(pdf.save())], 'application/pdf');
 }
 
+Future<html.Blob> rotateImageClockwise(html.Blob image) async {
+  print('1');
+  var imageData = await readBlob(image);
+  print('2');
+  var decoded = i.decodeImage(imageData);
+  print('3');
+  var rotated = i.copyRotate(decoded, 90);
+  print('4');
+  return html.Blob([Uint8List.fromList(i.encodeJpg(rotated))], 'image/jpeg');
+}
+
 Future<Uint8List> readBlob(html.Blob blob) {
   var completer = Completer<Uint8List>();
   var reader = html.FileReader()..readAsArrayBuffer(blob);

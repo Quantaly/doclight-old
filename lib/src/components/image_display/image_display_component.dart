@@ -23,13 +23,21 @@ class ImageDisplayComponent {
   final Stream<Object> delete;
   final StreamController<Object> _deleteController;
 
-  ImageDisplayComponent._(this.delete, this._deleteController, this._sanitizer);
+  @Output()
+  final Stream<Object> rotate;
+  final StreamController<Object> _rotateController;
+
+  ImageDisplayComponent._(this.delete, this._deleteController, this.rotate,
+      this._rotateController, this._sanitizer);
   factory ImageDisplayComponent(DomSanitizationService sanitizer) {
-    var controller = StreamController<Object>();
-    return ImageDisplayComponent._(controller.stream, controller, sanitizer);
+    var delete = StreamController<Object>();
+    var rotate = StreamController<Object>();
+    return ImageDisplayComponent._(
+        delete.stream, delete, rotate.stream, rotate, sanitizer);
   }
 
   SafeUrl get safeSrc => _sanitizer.bypassSecurityTrustUrl(src);
 
   void triggerDelete() => _deleteController.add(null);
+  void triggerRotate() => _rotateController.add(null);
 }

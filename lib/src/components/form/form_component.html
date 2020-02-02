@@ -14,7 +14,8 @@
         </material-button>
     </div>
     <div class="images-container">
-        <dl-image-display *ngFor="let url of imageUrls; let i=index" [src]="url" (delete)="removeImage(i)">
+        <dl-image-display *ngFor="let url of imageUrls; let i=index" [src]="url"
+            (rotate)="rotateImage(workingDocument.imageIds[i])" (delete)="removeImage(i)">
         </dl-image-display>
     </div>
 </div>

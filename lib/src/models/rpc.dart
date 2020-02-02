@@ -23,3 +23,23 @@ class RenderResponse {
 
   Map<String, dynamic> toJson() => _$RenderResponseToJson(this);
 }
+
+@JsonSerializable()
+class RotateRequest {
+  int id;
+
+  RotateRequest();
+  factory RotateRequest.fromJson(Map<String, dynamic> json) =>
+      _$RotateRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RotateRequestToJson(this);
+}
+
+@JsonSerializable()
+class RotateResponse {
+  RotateResponse();
+  factory RotateResponse.fromJson(Map<String, dynamic> json) =>
+      _$RotateResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RotateResponseToJson(this);
+}
