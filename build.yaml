@@ -1,5 +1,0 @@
-targets:
-  $default:
-    builders:
-      build_web_compilers|dart_source_cleanup:
-        enabled: false
