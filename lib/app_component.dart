@@ -3,8 +3,8 @@ import 'package:angular_components/angular_components.dart';
 
 import 'src/components/document_list/document_list_component.dart';
 import 'src/components/form/form_component.dart';
-import 'src/services/rendering_service.dart';
 import 'src/services/storage_service.dart';
+import 'src/services/worker_service.dart';
 
 // AngularDart info: https://angulardart.dev
 // Components info: https://angulardart.dev/components
@@ -28,7 +28,9 @@ import 'src/services/storage_service.dart';
   ],
   providers: [
     ClassProvider(StorageService),
+    ClassProvider(WorkerService),
     ClassProvider(RenderingService),
+    ClassProvider(ImageManipulationService),
   ],
 )
 class AppComponent implements OnInit {

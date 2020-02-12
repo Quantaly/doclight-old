@@ -5,8 +5,8 @@ import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
 
 import '../../models/document.dart';
-import '../../services/rendering_service.dart';
 import '../../services/storage_service.dart';
+import '../../services/worker_service.dart';
 import '../image_display/image_display_component.dart';
 
 @Component(
@@ -80,7 +80,7 @@ class FormComponent implements AfterChanges {
 
   Future<void> rotateImage(int index) async {
     readyFuture = () async {
-      await _rendering.rotateImageClockwise(index);
+      //await _rendering.rotateImageClockwise(index);
       await reloadImages();
       return true;
     }();

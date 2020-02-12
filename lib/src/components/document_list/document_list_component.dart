@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 
-import '../../services/rendering_service.dart';
 import '../../services/storage_service.dart';
+import '../../services/worker_service.dart';
 
 @Component(
   selector: 'dl-document-list',
