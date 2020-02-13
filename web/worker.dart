@@ -21,24 +21,23 @@ void main() {
 
   // ignore: avoid_types_on_closure_parameters
   server.registerMethod('render', (Parameters params) async {
-    var request = RenderRequest.fromJson(params.asMap.cast<String, dynamic>());
+    var request =
+        serializers.deserializeWith(RenderRequest.serializer, params.value);
     var document = await storage.retrieveDocument(request.id);
     var images = await storage.loadImages(document.imageIds);
     var pdf = await renderPdfFromImages(images);
-    return (RenderResponse()..url = html.Url.createObjectUrlFromBlob(pdf))
-        .toJson();
+    return serializers.serializeWith(RenderResponse.serializer,
+        RenderResponse((b) => b.url = html.Url.createObjectUrlFromBlob(pdf)));
   });
 
   // ignore: avoid_types_on_closure_parameters
   server.registerMethod('rotateImageClockwise', (Parameters params) async {
-    print('1');
-    var id = RotateRequest.fromJson(params.asMap.cast<String, dynamic>()).id;
-    print('2');
+    var request =
+        serializers.deserializeWith(RotateRequest.serializer, params.value);
+    var id = request.id;
     var image = await storage.loadImage(id);
-    print('3');
     await storage.updateImage(id, await rotateImageClockwise(image));
-    print('4');
-    return RotateResponse().toJson();
+    return {};
   });
 
   server.listen();

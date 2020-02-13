@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:html' as html;
 import 'dart:indexed_db';
 
+import 'package:doclight/worker.dart';
+
 import '../models/document.dart';
 
 const dbVersion = 1;
@@ -18,7 +20,8 @@ class StorageService {
   Future<int> createDocument() async {
     var txn = await _getTransaction('documents', 'readwrite');
     var documentStore = txn.objectStore('documents');
-    var ret = await documentStore.add(Document.empty().toJson());
+    var ret = await documentStore.add(standardSerializers.serializeWith(
+        Document.serializer, Document.empty()));
     await txn.completed;
     return ret;
   }
@@ -30,8 +33,8 @@ class StorageService {
     await for (var cursor in documentStore.openCursor()) {
       documents.add(DocumentWithId()
         ..id = cursor.key
-        ..document =
-            Document.fromJson((cursor.value as Map).cast<String, dynamic>()));
+        ..document = standardSerializers.deserializeWith(
+            Document.serializer, cursor.value));
       cursor.next();
     }
     documents.sort((a, b) => b.document.lastModified
@@ -43,14 +46,15 @@ class StorageService {
   Future<Document> retrieveDocument(int id) async {
     var txn = await _getTransaction('documents', 'readonly');
     var documentStore = txn.objectStore('documents');
-    return Document.fromJson(
-        (await documentStore.getObject(id) as Map).cast<String, dynamic>());
+    return standardSerializers.deserializeWith(
+        Document.serializer, await documentStore.getObject(id));
   }
 
   Future<void> updateDocument(int id, Document document) async {
     var txn = await _getTransaction('documents', 'readwrite');
     var documentStore = txn.objectStore('documents');
-    await documentStore.put(document.toJson(), id);
+    await documentStore.put(
+        standardSerializers.serializeWith(Document.serializer, document), id);
     await txn.completed;
   }
 
@@ -65,8 +69,8 @@ class StorageService {
     var txn = await _getTransaction(['documents', 'images'], 'readwrite');
     var documentStore = txn.objectStore('documents');
     var imageStore = txn.objectStore('images');
-    var document = Document.fromJson(
-        (await documentStore.getObject(id) as Map).cast<String, dynamic>());
+    var document = standardSerializers.deserializeWith(
+        Document.serializer, await documentStore.getObject(id));
     await Future.wait([
       documentStore.delete(id),
       for (var id in document.imageIds) imageStore.delete(id),
@@ -90,7 +94,7 @@ class StorageService {
     return ret;
   }
 
-  Future<List<html.Blob>> loadImages(List<int> ids) async {
+  Future<List<html.Blob>> loadImages(Iterable<int> ids) async {
     var txn = await _getTransaction('images', 'readonly');
     var imageStore = txn.objectStore('images');
     return Future.wait(ids.map((id) async {
@@ -99,7 +103,7 @@ class StorageService {
     }));
   }
 
-  Future<List<String>> loadImageUrls(List<int> ids) async =>
+  Future<List<String>> loadImageUrls(Iterable<int> ids) async =>
       (await loadImages(ids)).map(html.Url.createObjectUrlFromBlob).toList();
 
   Future<void> updateImage(int id, html.Blob image) async {
@@ -122,7 +126,8 @@ class StorageService {
     var documentStore = txn.objectStore('documents');
     var imageStore = txn.objectStore('images');
     await Future.wait([
-      documentStore.put(document.toJson(), documentId),
+      documentStore.put(
+          serializers.serializeWith(Document.serializer, document), documentId),
       imageStore.delete(imageId),
       txn.completed,
     ]);

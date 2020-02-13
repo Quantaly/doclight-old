@@ -5,6 +5,7 @@ import 'package:json_rpc_2/json_rpc_2.dart';
 
 import '../injected_channel.dart';
 import '../models/rpc.dart';
+import '../models/serializers.dart';
 
 part 'image_manipulation_service.dart';
 part 'rendering_service.dart';

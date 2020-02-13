@@ -1,25 +1,24 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 
 part 'document.g.dart';
 
-@JsonSerializable()
-class Document {
-  String name;
-  DateTime lastModified;
-  List<int> imageIds;
+abstract class Document implements Built<Document, DocumentBuilder> {
+  static Serializer<Document> get serializer => _$documentSerializer;
 
-  Document();
+  String get name;
+  DateTime get lastModified;
+  BuiltList<int> get imageIds;
+
+  Document._();
+  factory Document([void Function(DocumentBuilder) updates]) = _$Document;
+
   factory Document.empty() {
     var now = DateTime.now();
-    return Document()
+    return Document((b) => b
       ..name = '${now.month}-${now.day}-${now.year} '
           '${now.hour}:${now.minute.toString().padLeft(2, '0')}'
-      ..lastModified = now
-      ..imageIds = [];
+      ..lastModified = now);
   }
-
-  factory Document.fromJson(Map<String, dynamic> json) =>
-      _$DocumentFromJson(json);
-
-  Map<String, dynamic> toJson() => _$DocumentToJson(this);
 }

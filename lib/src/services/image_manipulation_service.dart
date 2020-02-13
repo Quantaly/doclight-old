@@ -7,6 +7,8 @@ class ImageManipulationService {
 
   Future<void> rotateImageClockwise(int id) async {
     await _worker._client.sendRequest(
-        'rotateImageClockwise', (RotateRequest()..id = id).toJson());
+        'rotateImageClockwise',
+        serializers.serializeWith(
+            RotateRequest.serializer, RotateRequest((b) => b..id = id)));
   }
 }

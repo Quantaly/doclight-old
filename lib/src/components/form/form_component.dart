@@ -58,12 +58,12 @@ class FormComponent implements AfterChanges {
   }
 
   Future<void> saveDocument() async {
-    workingDocument.lastModified = DateTime.now();
+    //workingDocument.lastModified = DateTime.now();
     await _storage.updateDocument(workingDocumentId, workingDocument);
   }
 
   Future<void> updateName() async {
-    workingDocument.name = nameControl.value;
+    //workingDocument.name = nameControl.value;
     await saveDocument();
   }
 
@@ -74,7 +74,7 @@ class FormComponent implements AfterChanges {
   Future<void> addImage(html.Blob image) async {
     imageUrls.add(html.Url.createObjectUrlFromBlob(image));
     var imageId = await _storage.storeImage(image);
-    workingDocument.imageIds.add(imageId);
+    //workingDocument.imageIds.add(imageId);
     await saveDocument();
   }
 
@@ -90,10 +90,10 @@ class FormComponent implements AfterChanges {
   Future<void> removeImage(int index) async {
     await readyFuture;
     imageUrls.removeAt(index);
-    var imageId = workingDocument.imageIds.removeAt(index);
-    workingDocument.lastModified = DateTime.now();
-    await _storage.deleteImageAndUpdateDocument(
-        imageId, workingDocumentId, workingDocument);
+    //var imageId = workingDocument.imageIds.removeAt(index);
+    //workingDocument.lastModified = DateTime.now();
+    /*await _storage.deleteImageAndUpdateDocument(
+        imageId, workingDocumentId, workingDocument);*/
   }
 
   Future<void> render() async {

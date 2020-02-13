@@ -1,45 +1,38 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 
 part 'rpc.g.dart';
 
-@JsonSerializable()
-class RenderRequest {
-  int id;
+abstract class RenderRequest
+    implements Built<RenderRequest, RenderRequestBuilder> {
+  static Serializer<RenderRequest> get serializer => _$renderRequestSerializer;
 
-  RenderRequest();
-  factory RenderRequest.fromJson(Map<String, dynamic> json) =>
-      _$RenderRequestFromJson(json);
+  int get id;
 
-  Map<String, dynamic> toJson() => _$RenderRequestToJson(this);
+  RenderRequest._();
+  factory RenderRequest([void Function(RenderRequestBuilder) updates]) =
+      _$RenderRequest;
 }
 
-@JsonSerializable()
-class RenderResponse {
-  String url;
+abstract class RenderResponse
+    implements Built<RenderResponse, RenderResponseBuilder> {
+  static Serializer<RenderResponse> get serializer =>
+      _$renderResponseSerializer;
 
-  RenderResponse();
-  factory RenderResponse.fromJson(Map<String, dynamic> json) =>
-      _$RenderResponseFromJson(json);
+  String get url;
 
-  Map<String, dynamic> toJson() => _$RenderResponseToJson(this);
+  RenderResponse._();
+  factory RenderResponse([void Function(RenderResponseBuilder) updates]) =
+      _$RenderResponse;
 }
 
-@JsonSerializable()
-class RotateRequest {
-  int id;
+abstract class RotateRequest
+    implements Built<RotateRequest, RotateRequestBuilder> {
+  static Serializer<RotateRequest> get serializer => _$rotateRequestSerializer;
 
-  RotateRequest();
-  factory RotateRequest.fromJson(Map<String, dynamic> json) =>
-      _$RotateRequestFromJson(json);
+  int get id;
 
-  Map<String, dynamic> toJson() => _$RotateRequestToJson(this);
-}
-
-@JsonSerializable()
-class RotateResponse {
-  RotateResponse();
-  factory RotateResponse.fromJson(Map<String, dynamic> json) =>
-      _$RotateResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$RotateResponseToJson(this);
+  RotateRequest._();
+  factory RotateRequest([void Function(RotateRequestBuilder) updates]) =
+      _$RotateRequest;
 }
