@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 
+import '../blob_loading.dart';
 import '../models/document.dart';
 import '../services/storage_service.dart';
 import '../services/worker_service.dart';
@@ -85,15 +86,17 @@ class DocumentBloc extends Bloc<DocumentEvent, DocumentState> {
       // -------------------- //
     } else if (event is AddImage) {
       yield previousState.rebuild((b) => b..thinking = true);
-      var id = await _storage.storeImage(event.image);
+      var src = html.Url.createObjectUrlFromBlob(event.image);
+      var newSrc = await _imageManipulation.constrainImageSize(src);
+      var blob = await fetchBlob(newSrc);
+      var id = await _storage.storeImage(blob);
       var newDocument = previousState.workingDoc.rebuild((b) => b
         ..imageIds.add(id)
         ..lastModified = now);
       await _storage.updateDocument(previousState.workingId, newDocument);
-      var imageUrl = html.Url.createObjectUrlFromBlob(event.image);
       yield previousState.rebuild((b) => b
         ..workingDoc.replace(newDocument)
-        ..imageUrls.add(imageUrl));
+        ..imageUrls.add(newSrc));
       // -------------------- //
     } else if (event is RotateImage) {
       yield previousState.rebuild((b) => b..thinking = true);

@@ -26,6 +26,30 @@ abstract class RenderResponse
       _$RenderResponse;
 }
 
+abstract class ConstrainRequest
+    implements Built<ConstrainRequest, ConstrainRequestBuilder> {
+  static Serializer<ConstrainRequest> get serializer =>
+      _$constrainRequestSerializer;
+
+  String get src;
+
+  ConstrainRequest._();
+  factory ConstrainRequest([void Function(ConstrainRequestBuilder) updates]) =
+      _$ConstrainRequest;
+}
+
+abstract class ConstrainResponse
+    implements Built<ConstrainResponse, ConstrainResponseBuilder> {
+  static Serializer<ConstrainResponse> get serializer =>
+      _$constrainResponseSerializer;
+
+  String get newSrc;
+
+  ConstrainResponse._();
+  factory ConstrainResponse([void Function(ConstrainResponseBuilder) updates]) =
+      _$ConstrainResponse;
+}
+
 abstract class RotateRequest
     implements Built<RotateRequest, RotateRequestBuilder> {
   static Serializer<RotateRequest> get serializer => _$rotateRequestSerializer;

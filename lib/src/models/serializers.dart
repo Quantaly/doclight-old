@@ -11,6 +11,8 @@ part 'serializers.g.dart';
   Document,
   RenderRequest,
   RenderResponse,
+  ConstrainResponse,
+  ConstrainRequest,
   RotateRequest,
 ])
 final Serializers serializers = _$serializers;
