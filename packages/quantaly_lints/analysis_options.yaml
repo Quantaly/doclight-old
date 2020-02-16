@@ -1,0 +1,38 @@
+include: package:pedantic/analysis_options.yaml
+
+linter:
+  rules:
+    - avoid_function_literals_in_foreach_calls
+    - avoid_positional_boolean_parameters
+    - avoid_private_typedef_functions
+    - avoid_renaming_method_parameters
+    - avoid_returning_null_for_void
+    - avoid_setters_without_getters
+    - avoid_types_on_closure_parameters
+    - await_only_futures
+    - camel_case_types
+    - comment_references
+    - constant_identifier_names
+    - directives_ordering
+    - file_names
+    - hash_and_equals
+    - implementation_imports
+    - lines_longer_than_80_chars
+    - no_adjacent_strings_in_list
+    - non_constant_identifier_names
+    - prefer_function_declarations_over_variables
+    - prefer_generic_function_type_aliases
+    - prefer_initializing_formals
+    - prefer_interpolation_to_compose_strings
+    - prefer_typing_uninitialized_variables       # keep until NNBD
+    - prefer_void_to_null
+    - sort_child_properties_last
+    - sort_pub_dependencies
+  # - type_annotate_public_apis # no
+    - unnecessary_await_in_return
+    - unnecessary_brace_in_string_interps
+    - unnecessary_lambdas
+    - unnecessary_parenthesis
+
+    # Seems like a good idea, hasn't caused any problems at least
+    - use_string_buffers
