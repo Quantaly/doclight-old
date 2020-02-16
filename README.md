@@ -1,7 +1,5 @@
-# doclight
+# Doclight
 
-A web app that uses [AngularDart](https://angulardart.dev) and
-[AngularDart Components](https://angulardart.dev/components).
+A simple image-to-PDF converter designed for document scanning.
 
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+**Note: It currently only works on Chrome and derivatives due to relying on 2D [OffscreenCanvas](https://caniuse.com/#feat=offscreencanvas) functionality for image manipulation.**
