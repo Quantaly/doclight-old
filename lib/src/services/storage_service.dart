@@ -127,7 +127,8 @@ class StorageService {
     var imageStore = txn.objectStore('images');
     await Future.wait([
       documentStore.put(
-          serializers.serializeWith(Document.serializer, document), documentId),
+          standardSerializers.serializeWith(Document.serializer, document),
+          documentId),
       imageStore.delete(imageId),
       txn.completed,
     ]);

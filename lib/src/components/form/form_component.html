@@ -1,4 +1,4 @@
-<div [style.opacity]="((readyFuture | async) ?? false) ? '100%' : '50%'">
+<div [style.opacity]="((bloc | bloc).thinking) ? '50%' : '100%'">
     <div class="name-container">
         <material-input type="text" label="Document name" floatingLabel [ngFormControl]="nameControl"
             (change)="updateName()"></material-input>
@@ -9,13 +9,13 @@
         <material-button raised class="indigo" (trigger)="getImage()">
             <material-icon icon="camera_alt"></material-icon> Add photo
         </material-button>
-        <material-button raised [disabled]="imageUrls.isEmpty" (trigger)="render()">
+        <material-button raised [disabled]="(bloc | bloc).imageUrls.isEmpty" (trigger)="render()">
             <material-icon icon="picture_as_pdf"></material-icon> Render PDF
         </material-button>
     </div>
     <div class="images-container">
-        <dl-image-display *ngFor="let url of imageUrls; let i=index" [src]="url"
-            (rotate)="rotateImage(workingDocument.imageIds[i])" (delete)="removeImage(i)">
+        <dl-image-display *ngFor="let url of (bloc | bloc).imageUrls; let i=index" [src]="url"
+            (rotate)="rotateImage(i)" (delete)="removeImage(i)">
         </dl-image-display>
     </div>
 </div>

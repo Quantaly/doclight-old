@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 
+import '../../blocs/document_bloc.dart';
 import '../../services/storage_service.dart';
-import '../../services/worker_service.dart';
 
 @Component(
   selector: 'dl-document-list',
@@ -23,20 +23,19 @@ import '../../services/worker_service.dart';
   ],
 )
 class DocumentListComponent implements OnInit {
+  final DocumentBloc bloc;
   final StorageService _storage;
-  final RenderingService _rendering;
 
   @Output()
   final Stream<int> open;
   final StreamController<int> _openController;
 
   DocumentListComponent._(
-      this._storage, this._rendering, this.open, this._openController);
-  factory DocumentListComponent(
-      StorageService storage, RenderingService rendering) {
+      this.bloc, this._storage, this.open, this._openController);
+  factory DocumentListComponent(DocumentBloc bloc, StorageService storage) {
     var controller = StreamController<int>();
     return DocumentListComponent._(
-        storage, rendering, controller.stream, controller);
+        bloc, storage, controller.stream, controller);
   }
 
   Future<List<DocumentWithId>> docListFuture = Future.value([]);
@@ -55,7 +54,7 @@ class DocumentListComponent implements OnInit {
     docListFuture = _storage.listDocuments();
   }
 
-  Future<void> renderDocument(int id, String name) async {
-    await _rendering.renderAndDownload(id, '$name.pdf');
+  void renderDocument(int id) {
+    bloc.add(ExportPdf()..id = id);
   }
 }

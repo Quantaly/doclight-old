@@ -19,6 +19,6 @@ abstract class Document implements Built<Document, DocumentBuilder> {
     return Document((b) => b
       ..name = '${now.month}-${now.day}-${now.year} '
           '${now.hour}:${now.minute.toString().padLeft(2, '0')}'
-      ..lastModified = now);
+      ..lastModified = now.toUtc());
   }
 }

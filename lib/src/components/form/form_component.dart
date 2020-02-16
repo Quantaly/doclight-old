@@ -1,12 +1,12 @@
+import 'dart:async';
 import 'dart:html' as html;
 
 import 'package:angular/angular.dart';
+import 'package:angular_bloc/angular_bloc.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_forms/angular_forms.dart';
 
-import '../../models/document.dart';
-import '../../services/storage_service.dart';
-import '../../services/worker_service.dart';
+import '../../blocs/document_bloc.dart';
 import '../image_display/image_display_component.dart';
 
 @Component(
@@ -22,82 +22,52 @@ import '../image_display/image_display_component.dart';
     ImageDisplayComponent,
   ],
   pipes: [
-    AsyncPipe,
+    BlocPipe,
   ],
 )
-class FormComponent implements AfterChanges {
-  final StorageService _storage;
-  final RenderingService _rendering;
+class FormComponent implements OnInit, OnDestroy {
+  final DocumentBloc bloc;
 
-  FormComponent(this._storage, this._rendering);
-
-  @Input()
-  int workingDocumentId;
+  FormComponent(this.bloc);
 
   @ViewChild('fileInput')
   html.FileUploadInputElement fileInput;
 
-  Future<bool> readyFuture = Future.value(false);
-  Document workingDocument = Document.empty();
-
   Control<String> nameControl = Control('');
-  List<String> imageUrls = [];
+  StreamSubscription _nameSubscription;
 
   @override
-  void ngAfterChanges() {
-    readyFuture = () async {
-      workingDocument = await _storage.retrieveDocument(workingDocumentId);
-      nameControl.updateValue(workingDocument.name);
-      await reloadImages();
-      return true;
-    }();
+  void ngOnInit() {
+    _nameSubscription =
+        bloc.listen((state) => nameControl.updateValue(state.workingDoc.name));
   }
 
-  Future<void> reloadImages() async {
-    imageUrls = await _storage.loadImageUrls(workingDocument.imageIds);
-  }
-
-  Future<void> saveDocument() async {
-    //workingDocument.lastModified = DateTime.now();
-    await _storage.updateDocument(workingDocumentId, workingDocument);
-  }
-
-  Future<void> updateName() async {
-    //workingDocument.name = nameControl.value;
-    await saveDocument();
+  void updateName() {
+    bloc.add(ChangeName()..newName = nameControl.value);
   }
 
   void getImage() {
     fileInput.click();
   }
 
-  Future<void> addImage(html.Blob image) async {
-    imageUrls.add(html.Url.createObjectUrlFromBlob(image));
-    var imageId = await _storage.storeImage(image);
-    //workingDocument.imageIds.add(imageId);
-    await saveDocument();
+  void addImage(html.Blob image) {
+    bloc.add(AddImage()..image = image);
   }
 
-  Future<void> rotateImage(int index) async {
-    readyFuture = () async {
-      //await _rendering.rotateImageClockwise(index);
-      await reloadImages();
-      return true;
-    }();
-    await readyFuture;
+  void rotateImage(int index) {
+    bloc.add(RotateImage()..index = index);
   }
 
-  Future<void> removeImage(int index) async {
-    await readyFuture;
-    imageUrls.removeAt(index);
-    //var imageId = workingDocument.imageIds.removeAt(index);
-    //workingDocument.lastModified = DateTime.now();
-    /*await _storage.deleteImageAndUpdateDocument(
-        imageId, workingDocumentId, workingDocument);*/
+  void removeImage(int index) {
+    bloc.add(DeleteImage()..index = index);
   }
 
-  Future<void> render() async {
-    await _rendering.renderAndDownload(
-        workingDocumentId, '${workingDocument.name}.pdf');
+  void render() {
+    bloc.add(ExportPdf()..id = bloc.state.workingId);
+  }
+
+  @override
+  void ngOnDestroy() {
+    _nameSubscription.cancel();
   }
 }

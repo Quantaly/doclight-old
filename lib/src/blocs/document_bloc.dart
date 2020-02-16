@@ -27,6 +27,10 @@ class DocumentEvent {}
 
 class InitEvent extends DocumentEvent {}
 
+class ChangeName extends DocumentEvent {
+  String newName;
+}
+
 class AddImage extends DocumentEvent {
   html.File image;
 }
@@ -48,9 +52,9 @@ class ChangeDocument extends DocumentEvent {
 }
 
 class DocumentBloc extends Bloc<DocumentEvent, DocumentState> {
-  StorageService _storage;
-  RenderingService _rendering;
-  ImageManipulationService _imageManipulation;
+  final StorageService _storage;
+  final RenderingService _rendering;
+  final ImageManipulationService _imageManipulation;
 
   DocumentBloc(this._storage, this._rendering, this._imageManipulation);
 
@@ -72,11 +76,19 @@ class DocumentBloc extends Bloc<DocumentEvent, DocumentState> {
         ..workingDoc.replace(document)
         ..imageUrls.replace(imageUrls));
       // -------------------- //
+    } else if (event is ChangeName) {
+      var newDocument = previousState.workingDoc.rebuild((b) => b
+        ..name = event.newName
+        ..lastModified = now);
+      await _storage.updateDocument(previousState.workingId, newDocument);
+      yield previousState.rebuild((b) => b..workingDoc.replace(newDocument));
+      // -------------------- //
     } else if (event is AddImage) {
       yield previousState.rebuild((b) => b..thinking = true);
       var id = await _storage.storeImage(event.image);
-      var newDocument =
-          previousState.workingDoc.rebuild((b) => b..imageIds.add(id));
+      var newDocument = previousState.workingDoc.rebuild((b) => b
+        ..imageIds.add(id)
+        ..lastModified = now);
       await _storage.updateDocument(previousState.workingId, newDocument);
       var imageUrl = html.Url.createObjectUrlFromBlob(event.image);
       yield previousState.rebuild((b) => b
@@ -87,16 +99,22 @@ class DocumentBloc extends Bloc<DocumentEvent, DocumentState> {
       yield previousState.rebuild((b) => b..thinking = true);
       await _imageManipulation
           .rotateImageClockwise(previousState.workingDoc.imageIds[event.index]);
+      var newDocument =
+          previousState.workingDoc.rebuild((b) => b.lastModified = now);
+      await _storage.updateDocument(previousState.workingId, newDocument);
       var imageUrls =
           await _storage.loadImageUrls(previousState.workingDoc.imageIds);
       yield previousState.rebuild((b) => b..imageUrls.replace(imageUrls));
       // -------------------- //
     } else if (event is DeleteImage) {
       yield previousState.rebuild((b) => b..thinking = true);
-      var newDocument = previousState.workingDoc
-          .rebuild((b) => b..imageIds.removeAt(event.index));
+      var newDocument = previousState.workingDoc.rebuild((b) => b
+        ..imageIds.removeAt(event.index)
+        ..lastModified = now);
       await _storage.deleteImageAndUpdateDocument(
-          event.index, previousState.workingId, newDocument);
+          previousState.workingDoc.imageIds[event.index],
+          previousState.workingId,
+          newDocument);
       yield previousState.rebuild((b) => b
         ..workingDoc.replace(newDocument)
         ..imageUrls.removeAt(event.index));
@@ -118,6 +136,8 @@ class DocumentBloc extends Bloc<DocumentEvent, DocumentState> {
     }
   }
 }
+
+DateTime get now => DateTime.now().toUtc();
 
 // Importing pedantic is for suckers.
 void unawaited(Future f) {}

@@ -9,14 +9,14 @@
 
 <material-drawer temporary #drawer overlay>
     <div class="drawer-container" *deferredContent>
-        <dl-document-list (open)="workingDocumentId = $event; drawer.toggle()"></dl-document-list>
+        <dl-document-list (open)="openDocument($event); drawer.toggle()"></dl-document-list>
     </div>
 </material-drawer>
 
 <main class="material-content">
     <div class="content-container">
-        <dl-form *ngIf="ready" [workingDocumentId]="workingDocumentId"></dl-form>
-        <div *ngIf="!ready" class="loadingContainer">
+        <dl-form *ngIf="(bloc | bloc).workingDoc != null"></dl-form>
+        <div *ngIf="(bloc | bloc).workingDoc == null" class="loadingContainer">
             <material-spinner></material-spinner>
         </div>
     </div>
