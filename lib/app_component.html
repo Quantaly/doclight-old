@@ -15,7 +15,10 @@
 
 <main class="material-content">
     <div class="content-container">
-        <dl-form *ngIf="(bloc | bloc).workingDoc != null"></dl-form>
+        <div *ngIf="(bloc | bloc).workingDoc != null">
+            <dl-form></dl-form>
+            <dl-pwa-prompt></dl-pwa-prompt>
+        </div>
         <div *ngIf="(bloc | bloc).workingDoc == null" class="loadingContainer">
             <material-spinner></material-spinner>
         </div>

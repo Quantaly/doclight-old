@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+    <!--background-->
+    <rect width="512" height="512" stroke-opacity="0" fill="#3f51b5"/>
+    <!--document-->
+    <path d="M 100 40
+             L 337 40
+             L 412 115
+             L 412 472
+             L 100 472
+             Z"
+          stroke="white" stroke-width="20" fill-opacity="0"/>
+    <!--lens-->
+    <circle cx="256" cy="256" r="75" stroke="white" stroke-width="20" fill-opacity="0"/>
+    <!--glint-->
+    <circle cx="291" cy="221" r="20" stroke-opacity="0" fill="white"/>
+    <!--shine top-left-->
+    <line x1="181" y1="181" x2="141" y2="141" stroke="white" stroke-width="20"/>
+    <!--shine top-right-->
+    <line x1="331" y1="181" x2="371" y2="141" stroke="white" stroke-width="20"/>
+    <!--shine bottom-left-->
+    <line x1="181" y1="331" x2="141" y2="371" stroke="white" stroke-width="20"/>
+    <!--shine bottom-right-->
+    <line x1="331" y1="331" x2="371" y2="371" stroke="white" stroke-width="20"/>
+</svg>

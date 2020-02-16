@@ -5,6 +5,8 @@ import 'package:angular_components/angular_components.dart';
 import 'src/blocs/document_bloc.dart';
 import 'src/components/document_list/document_list_component.dart';
 import 'src/components/form/form_component.dart';
+import 'src/components/pwa_prompt/pwa_prompt.dart';
+import 'src/services/pwa_prompt_service.dart';
 import 'src/services/storage_service.dart';
 import 'src/services/worker_service.dart';
 
@@ -27,6 +29,7 @@ import 'src/services/worker_service.dart';
     FormComponent,
     DeferredContentDirective,
     DocumentListComponent,
+    PwaPrompt,
   ],
   providers: [
     ClassProvider(DocumentBloc),
@@ -34,6 +37,7 @@ import 'src/services/worker_service.dart';
     ClassProvider(WorkerService),
     ClassProvider(RenderingService),
     ClassProvider(ImageManipulationService),
+    ClassProvider(PwaPromptService),
   ],
   pipes: [
     BlocPipe,
